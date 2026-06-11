@@ -1785,6 +1785,17 @@ window.addEventListener('DOMContentLoaded', function() {
   var allBtns = document.querySelectorAll('[data-tab]');
   for (var b = 0; b < allBtns.length; b++) {
     (function(btn) {
+      var touchStartX = 0;
+      btn.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+      }, {passive: true});
+      btn.addEventListener('touchend', function(e) {
+        var dx = Math.abs(e.changedTouches[0].clientX - touchStartX);
+        if (dx < 10) {
+          e.preventDefault();
+          showTab(btn.getAttribute('data-tab'), btn);
+        }
+      });
       btn.addEventListener('click', function() {
         showTab(btn.getAttribute('data-tab'), btn);
       });
