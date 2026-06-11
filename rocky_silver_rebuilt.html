@@ -2486,7 +2486,10 @@ function renderForecast() {
 
 function showTab(id) {
   var tabs = document.querySelectorAll(".tc");
-  for (var i=0;i<tabs.length;i++) tabs[i].classList.remove("active");
+  for (var i=0;i<tabs.length;i++) {
+    tabs[i].classList.remove("active");
+    tabs[i].style.display = "none";
+  }
   var btns = document.querySelectorAll(".tbtn");
   for (var i=0;i<btns.length;i++) {
     btns[i].classList.remove("active");
@@ -2494,7 +2497,8 @@ function showTab(id) {
     if (btext.indexOf("'"+id+"'")>=0) btns[i].classList.add("active");
   }
   var tc = document.getElementById("tc-"+id);
-  if (tc) tc.classList.add("active");
+  if (tc) { tc.classList.add("active"); tc.style.display = "block"; }
+  window.scrollTo(0, 0);
   if (id==="chart") {
     // Force canvas to get real dimensions after tab is visible
     setTimeout(function() {
