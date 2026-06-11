@@ -27,11 +27,11 @@ nav{position:fixed;top:0;left:0;right:0;height:50px;z-index:300;background:rgba(
 .tabs::-webkit-scrollbar{display:none;}
 .tab{font-size:.6rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:5px 8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;white-space:nowrap;border-radius:2px;touch-action:manipulation;-webkit-tap-highlight-color:rgba(212,168,67,.3);}
 .tab.active{color:var(--gold-l);border-color:rgba(212,168,67,.5);background:rgba(212,168,67,.1);}
-/* v17 FIX: pages display:none, only .active shows. #tab-daily fallback always visible */
+/* Tab pages — hidden by default, .active shows */
 .page{display:none;padding-top:132px;min-height:100vh;z-index:1;position:relative;}
 @media screen and (max-height:500px){.page{padding-top:80px;}}
-.page.active{display:block!important;visibility:visible!important;opacity:1!important;}
-#tab-daily{display:block!important;visibility:visible!important;opacity:1!important;}
+.page.active{display:block;}
+#tab-daily{display:block;}
 #tab-daily.hidden{display:none!important;}
 .wrap{max-width:1440px;margin:0 auto;padding:4px 13px 28px;}
 .page-hdr{text-align:center;margin-bottom:14px;}
@@ -1268,26 +1268,23 @@ function isAIEnabled(fn) {
 
 // ---- TAB SYSTEM ----
 function showTab(id, el) {
-  // Step 1: Show target tab IMMEDIATELY with full CSS override
+  // Step 1: Show target tab — remove inline style first, then set active
   try {
     var target = document.getElementById('tab-' + id);
     if (target) {
-      target.style.display = 'block';
-      target.style.visibility = 'visible';
-      target.style.opacity = '1';
+      target.style.cssText = ''; // clear ALL inline styles
       target.classList.add('active');
       target.classList.remove('hidden');
     }
   } catch(e) {}
 
-  // Step 2: Hide other tabs
+  // Step 2: Hide other tabs with inline style
   try {
     var pages = document.querySelectorAll('.page');
     for (var i = 0; i < pages.length; i++) {
       if (pages[i].id !== 'tab-' + id) {
         pages[i].classList.remove('active');
         pages[i].style.display = 'none';
-        pages[i].style.visibility = 'hidden';
         if (pages[i].id === 'tab-daily') pages[i].classList.add('hidden');
       }
     }
@@ -1302,17 +1299,7 @@ function showTab(id, el) {
     }
   } catch(e) {}
 
-  // Step 4: Re-confirm target visible after hide loop (Android race condition fix)
-  try {
-    var target2 = document.getElementById('tab-' + id);
-    if (target2) {
-      target2.style.display = 'block';
-      target2.style.visibility = 'visible';
-      target2.style.opacity = '1';
-    }
-  } catch(e) {}
-
-  // Step 5: Draw charts — two attempts staggered so canvas has dimensions on mobile
+  // Step 4: Draw charts
   setTimeout(function() { try { initChartsForTab(id); } catch(e) {} }, 80);
   setTimeout(function() { try { initChartsForTab(id); } catch(e) {} }, 500);
 }
