@@ -5053,9 +5053,9 @@ function addJacksonHoleToRisk() {
   var evt = {
     source: "FED CALENDAR",
     type: "MARKET",
-    title: "Jackson Hole Fed Symposium Aug 15-17 \u2014 " + formatCountdown(days) + " away",
+    title: "Jackson Hole Fed Symposium Aug 15-17 - " + formatCountdown(days) + " away",
     detail: "Powell expected to signal rate cuts. 2024 precedent: silver +25% in 6 weeks after Jackson Hole. Current setup stronger.",
-    impact: "+15% to +30% bullish",
+    impact: {minPct: 15, maxPct: 30},
     score: 9,
     silverBull: true,
     pct: "+20%"
