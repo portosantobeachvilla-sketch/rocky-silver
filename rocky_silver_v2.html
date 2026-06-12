@@ -6,10 +6,10 @@
 <title>Rocky Silver Master Intelligence v2</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#12131A;color:#E8EAF0;font-family:'Courier New',monospace;max-width:480px;margin:0 auto;min-height:100vh;overflow:hidden;height:100vh;display:flex;flex-direction:column}
+body{background:#12131A;color:#E8EAF0;font-family:'Courier New',monospace;max-width:480px;margin:0 auto;min-height:100vh}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-#hdr{background:#1A1B26;border-bottom:1px solid #2E3148;padding:12px 14px 10px;position:relative;z-index:100;flex-shrink:0}
+#hdr{background:#1A1B26;border-bottom:1px solid #2E3148;padding:12px 14px 10px;position:sticky;top:0;z-index:100}
 .hrow{display:flex;justify-content:space-between;align-items:flex-start}
 .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#3DBA7A;margin-right:5px;animation:blink 2s infinite}
 .tag{font-size:9px;letter-spacing:3px;color:#D4AF37;text-transform:uppercase}
@@ -23,13 +23,13 @@ body{background:#12131A;color:#E8EAF0;font-family:'Courier New',monospace;max-wi
 .sv{font-size:11px;font-weight:700;margin-top:2px}
 #sparkwrap{margin-top:8px;display:none}
 .slbl{font-size:8px;color:#888888;letter-spacing:2px;margin-bottom:2px}
-#tabs{display:flex;flex-wrap:wrap;background:#161820;border-bottom:1px solid #2E3148;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0}
+#tabs{display:flex;flex-wrap:wrap;background:#161820;border-bottom:1px solid #2E3148;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 #tabs::-webkit-scrollbar{display:none}
 .tbtn{flex:0 0 auto;padding:10px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:inherit;color:#8A8FA8;background:none;border:none;border-bottom:2px solid transparent;white-space:nowrap}
 .tbtn.active{color:#D4AF37;border-bottom:2px solid #D4AF37;font-weight:700}
 .sec{padding:14px 14px;animation:fadeUp .3s both}
 .stitle{font-size:10px;letter-spacing:3px;color:#D4AF37;text-transform:uppercase;margin-bottom:10px;font-weight:700}
-.tc{display:none}.tc.active{display:block;background:#12131A}
+.tc{display:none}.tc.active{display:block;min-height:100vh;background:#12131A}
 .card{background:#1C1E2A;border:1px solid #2E3148;border-radius:8px;padding:11px 12px;margin-bottom:8px}
 .bdg{display:inline-block;padding:2px 7px;border-radius:3px;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
 .rbtn{padding:4px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:#1C1E2A;color:#666;border:1px solid #2E3148;border-radius:4px;cursor:pointer;font-family:inherit}
@@ -55,6 +55,7 @@ body{background:#12131A;color:#E8EAF0;font-family:'Courier New',monospace;max-wi
 </head>
 <body>
 
+<a id="top"></a>
 <div id="hdr">
   <div class="hrow">
     <div>
@@ -112,7 +113,6 @@ body{background:#12131A;color:#E8EAF0;font-family:'Courier New',monospace;max-wi
 </div>
 
 <!-- SUMMARY -->
-<div id="tab-content-wrapper" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#12131A">
 <div id="tc-summary" class="tc active">
 <div class="sec">
   <div class="stitle">Market Summary</div>
@@ -1246,7 +1246,6 @@ body{background:#12131A;color:#E8EAF0;font-family:'Courier New',monospace;max-wi
   Sources: Silver Institute BloombergNEF ING UBS Metals Focus Federal Reserve GoldSilver.com Polymarket CME Group Alpha Vantage<br>
   <span style="color:#E05555">NOT FINANCIAL ADVICE.</span> Model-generated. Consult a qualified advisor.
 </div>
-</div><!-- end tab-content-wrapper -->
 
 <script>
 var AV_KEY = "THT8QBBLU72ZIKGJ";
@@ -2646,9 +2645,10 @@ function showTab(id) {
   }
   var tc = document.getElementById("tc-"+id);
   if (tc) { tc.classList.add("active"); tc.style.display = "block"; }
-  // Scroll wrapper to top instantly
-  var w = document.getElementById("tab-content-wrapper");
-  if (w) { w.scrollTop = 0; }
+  // Most reliable scroll-to-top on Android Chrome - jump to anchor
+  window.location.hash = '';
+  window.location.hash = 'top';
+  setTimeout(function(){ window.scrollTo(0,0); }, 20);
   if (id==="chart") {
     // Force canvas to get real dimensions after tab is visible
     setTimeout(function() {
