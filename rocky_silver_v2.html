@@ -92,7 +92,7 @@ body{background:#12131A;color:#E8EAF0;font-family:'Courier New',monospace;max-wi
 <div id="tabs">
   <button class="tbtn active" onclick="showTab('summary')">📊 Daily</button>
   <button class="tbtn" onclick="showTab('chart')">📈 Chart</button>
-  <button class="tbtn" onclick="showTab('prediction')">AI AI Pred</button>
+  <button class="tbtn" onclick="showTab('prediction')">o AI PRED</button>
   <button class="tbtn" onclick="showTab('poly')">🎯 Polymarket</button>
   <button class="tbtn" onclick="showTab('comex')">📡 COMEX</button>
   <button class="tbtn" onclick="showTab('demand')">📦 Demand</button>
@@ -2644,7 +2644,11 @@ function showTab(id) {
   }
   var tc = document.getElementById("tc-"+id);
   if (tc) { tc.classList.add("active"); tc.style.display = "block"; }
-  window.scrollTo(0, 0);
+  // Force scroll to top - works on all Android Chrome versions
+  window.scrollTo(0,0);
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  setTimeout(function(){ window.scrollTo(0,0); document.body.scrollTop=0; }, 50);
   if (id==="chart") {
     // Force canvas to get real dimensions after tab is visible
     setTimeout(function() {
