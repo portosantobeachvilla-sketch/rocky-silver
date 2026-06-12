@@ -2644,11 +2644,20 @@ function showTab(id) {
   }
   var tc = document.getElementById("tc-"+id);
   if (tc) { tc.classList.add("active"); tc.style.display = "block"; }
-  // Force scroll to top - works on all Android Chrome versions
-  window.scrollTo(0,0);
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  setTimeout(function(){ window.scrollTo(0,0); document.body.scrollTop=0; }, 50);
+  // Scroll to top - comprehensive fix for all Android Chrome versions
+  try { window.scrollTo({top:0,left:0,behavior:'instant'}); } catch(e) {}
+  try { window.scrollTo(0,0); } catch(e) {}
+  try { document.body.scrollTop = 0; } catch(e) {}
+  try { document.documentElement.scrollTop = 0; } catch(e) {}
+  try { document.getElementById('hdr').scrollIntoView({behavior:'instant',block:'start'}); } catch(e) {}
+  setTimeout(function(){
+    try { window.scrollTo(0,0); } catch(e) {}
+    try { document.body.scrollTop = 0; } catch(e) {}
+    try { document.documentElement.scrollTop = 0; } catch(e) {}
+  }, 10);
+  setTimeout(function(){
+    try { window.scrollTo(0,0); } catch(e) {}
+  }, 100);
   if (id==="chart") {
     // Force canvas to get real dimensions after tab is visible
     setTimeout(function() {
